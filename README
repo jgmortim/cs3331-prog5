@@ -1,0 +1,91 @@
+                                    README
+
+Question 1:
+
+Proof: Max 3 elves ask question.
+
+When an elf thread calls AskQuestion, it checks the condition varible
+isGroupWaiting. If the boolean is true, the elf waits for the GroupReleased 
+condition. isGroupWaiting is set true by the third elf to make it past the
+first if statement. Then the group wakes santa and waits for the answer. After
+the question is answered the elves in the group may return from AskQuestion,
+the last elf to return, resets the group counter to zero, sets isGroupWaiting
+to false, and signals GroupReleased. 
+The only way an elf can get past the initial if statement is if there is less
+than 3 elves in the group.
+
+Question 2:
+
+Proof: No elf leaves before question answered.
+
+After making it past the if statement described in Question 1, the elves check
+the condition variable isQuestionAnswered, which can only be set to true by
+Santa after the question has been answerd. If isQuestionAnswered is false, the
+elves wait on the condition QuestionAnswered, which is signaled by santa 3
+times after the question has been answered. Thus, no elf can exit before the
+question has been answered.
+
+Question 3: 
+
+Proof: Show that while three elves are waiting for an answer, no other elves
+can cut in and ask questions.
+
+See Questions 1 and 2. For clarification, the if statement will block until
+the whole group is released.
+
+Question 4:
+
+Proof: Santa only answers questions when awake.
+
+If Santa is awake, he is either dealing with a group of elves or with the
+reindeer. Santa cannot call the AnswerQuestion function while in the sleep
+function. And he can only return from the sleep function, if he is woken up.
+Thus, he has to be woken up to answer questions and can't answer questions in
+his sleep.
+
+Question 5:
+
+Proof: the only deer to wake santa is the last one to return.
+
+When the deer return (by calling ReindeerBack(), a monitor function), the
+ReindeerRet counter is incremented by 1. If the counter is equal to
+ReindeerTotal, the deer is the last one and this deer can now wake up santa.
+Thus, only the last reindeer can wake up santa.
+
+Question 6:
+
+Proof: Santa always handles reindeer first.
+
+After Santa returns from the Sleep() function, the first thing he does is call
+DeerCheck(), which return true if all deer are back. If it returns false, santa
+deals with the elves. Thus, the reindeer are always handled first. 
+
+Question 7:
+
+Proof: Reindeer can't sneak out while Santa is attaching the sleigh or
+delivering toys.
+
+After the reindeer call WaitSleigh(), they immediately call FlyOff(). FlyOff()
+blocks the deer until they are all attached. Then the toys are delivered. 
+After the delivery is complete the deer are detached, but Flyoff() blocks
+until all deer are detached. The deer are then blocked by until Santa is
+able to put his sleigh away. Once this happens the trip is complete
+(TripComplete condition) and the deer are released to go on vacation.
+
+Question 8:
+
+Proof: Elves don't ask questions while Santa is busy with sleigh or deliveries.
+
+When an elf group has formed, they check if Santa is asleep (isAsleep). If he
+is, they wake him up. If he is not asleep, he must be busy with the deer or 
+sleigh. In this case, the group waits for santa to return to bed (Condition 
+Asleep0). This condition is only meet if santa returns to bed and find that an
+elf group is waiting and all reindeer are not back. Thus, the elves can only
+ask Santa question if is not busy with deer/sleigh.
+
+
+
+
+
+
+
